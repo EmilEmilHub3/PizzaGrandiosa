@@ -1,0 +1,79 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgresapi
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: pizza
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d pizza"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: pizza-rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  serverdb:
+    build:
+      context: .
+      dockerfile: PizzaGrandiosa/Dockerfile
+      target: final
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=pizza;Username=admin;Password=secret;
+      RabbitMQ__HostName: rabbitmq
+      RabbitMQ__Port: 5672
+      RabbitMQ__UserName: guest
+      RabbitMQ__Password: guest
+      RabbitMQ__QueueName: salesorder-created
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  webapiserver:
+    build:
+      context: .
+      dockerfile: PizzaWebAPI/Dockerfile
+      target: final
+    ports:
+      - "5000:5000"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5000
+      ApiSetting__DBServerURL: http://serverdb:8080
+    depends_on:
+      - serverdb
+
+  webserver:
+    build:
+      context: ./PizzaWeb
+      dockerfile: dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - webapiserver
+
+volumes:
+  postgres_data:

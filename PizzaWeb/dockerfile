@@ -1,0 +1,14 @@
+FROM nginx
+
+COPY . /usr/share/nginx/html
+
+WORKDIR /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+
+#Commands
+#docker build . -t pizzaweb
+#
+#docker run -dit --name staticpizzaweb -p 8000:80 -P pizzaweb

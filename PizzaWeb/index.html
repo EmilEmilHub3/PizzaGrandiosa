@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta
+      name="author"
+      content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
+    />
+    <meta name="generator" content="Astro v5.13.2" />
+    <title>Pizza Grandiosa · Bootstrap v5.3</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    <link
+      rel="canonical"
+      href="https://getbootstrap.com/docs/5.3/examples/carousel/"
+    />
+    <!--<script src="assets/js/color-modes.js"></script>-->
+    <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <meta name="theme-color" content="#712cf9" /><!-- 712cf9 815438-->
+    <link href="css/carousel.css" rel="stylesheet" />
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: #0000001a;
+        border: solid rgba(0, 0, 0, 0.15);
+        border-width: 1px 0;
+        box-shadow:
+          inset 0 0.5em 1.5em #0000001a,
+          inset 0 0.125em 0.5em #00000026;
+      }
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+      .bi {
+        vertical-align: -0.125em;
+        fill: currentColor;
+      }
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+      .btn-bd-primary {
+        --bd-violet-bg: #712cf9; <!--  -->
+        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+        --bs-btn-font-weight: 600;
+        --bs-btn-color: var(--bs-white);
+        --bs-btn-bg: var(--bd-violet-bg);
+        --bs-btn-border-color: var(--bd-violet-bg);
+        --bs-btn-hover-color: var(--bs-white);
+        --bs-btn-hover-bg: #6528e0;
+        --bs-btn-hover-border-color: #6528e0;
+        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+        --bs-btn-active-color: var(--bs-btn-hover-color);
+        --bs-btn-active-bg: #5a23c8;
+        --bs-btn-active-border-color: #5a23c8;
+      }
+      .bd-mode-toggle {
+        z-index: 1500;
+      }
+      .bd-mode-toggle .bi {
+        width: 1em;
+        height: 1em;
+      }
+      .bd-mode-toggle .dropdown-menu .active .bi {
+        display: block !important;
+      }
+    </style>
+    <script src="assets/dist/js/backendService.js"></script>
+  </head>
+  <body>
+      <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+          <symbol id="check2" viewBox="0 0 16 16">
+              <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
+          </symbol>
+          <symbol id="circle-half" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"></path>
+          </symbol>
+          <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+              <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"></path>
+              <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"></path>
+          </symbol>
+          <symbol id="sun-fill" viewBox="0 0 16 16">
+              <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"></path>
+          </symbol>
+      </svg>
+      <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
+          <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center"
+                  id="bd-theme"
+                  type="button"
+                  aria-expanded="false"
+                  data-bs-toggle="dropdown"
+                  aria-label="Toggle theme (auto)">
+              <svg class="bi my-1 theme-icon-active" aria-hidden="true">
+                  <use href="#circle-half"></use>
+              </svg>
+              <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow"
+              aria-labelledby="bd-theme-text">
+              <li>
+                  <button type="button"
+                          class="dropdown-item d-flex align-items-center"
+                          data-bs-theme-value="light"
+                          aria-pressed="false">
+                      <svg class="bi me-2 opacity-50" aria-hidden="true">
+                          <use href="#sun-fill"></use>
+                      </svg>
+                      Light
+                      <svg class="bi ms-auto d-none" aria-hidden="true">
+                          <use href="#check2"></use>
+                      </svg>
+                  </button>
+              </li>
+              <li>
+                  <button type="button"
+                          class="dropdown-item d-flex align-items-center"
+                          data-bs-theme-value="dark"
+                          aria-pressed="false">
+                      <svg class="bi me-2 opacity-50" aria-hidden="true">
+                          <use href="#moon-stars-fill"></use>
+                      </svg>
+                      Dark
+                      <svg class="bi ms-auto d-none" aria-hidden="true">
+                          <use href="#check2"></use>
+                      </svg>
+                  </button>
+              </li>
+              <li>
+                  <button type="button"
+                          class="dropdown-item d-flex align-items-center active"
+                          data-bs-theme-value="auto"
+                          aria-pressed="true">
+                      <svg class="bi me-2 opacity-50" aria-hidden="true">
+                          <use href="#circle-half"></use>
+                      </svg>
+                      Auto
+                      <svg class="bi ms-auto d-none" aria-hidden="true">
+                          <use href="#check2"></use>
+                      </svg>
+                  </button>
+              </li>
+          </ul>
+      </div>
+      <header data-bs-theme="dark">
+          <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+              <div class="container-fluid">
+                  <a class="navbar-brand headline" href="#">Pizza Grandiosa</a>
+                  <button class="navbar-toggler"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#navbarCollapse"
+                          aria-controls="navbarCollapse"
+                          aria-expanded="false"
+                          aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse navbar-collapse" id="navbarCollapse">
+                      <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                             <li class="nav-item">
+                                 <button id="homeBtn" class="btn btn-outline-primary">
+                                     <i class="bi bi-shop"></i> Hjem
+                                 </button>
+                             </li>
+                            <li class="nav-item">
+                              <button id="openMenuBtn" class="btn btn-outline-primary">
+                                  <i class="bi bi-shop"></i> Bestil
+                              </button>
+
+                          </li>
+                          <li class="nav-item">
+                              <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#createCustomerModal">
+                                  <i class="bi bi-person-plus"></i> Kontakt
+                              </button>
+                          </li>
+                      </ul>
+                      <form class="d-flex" role="search">
+                          <input type="number" id="customerId" class="form-control form-control-md" placeholder="Eksisterende ID...">
+             
+                      </form>
+                  </div>
+              </div>
+          </nav>
+      </header>
+      <main>
+          <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+              <div class="carousel-indicators">
+                  <button type="button"
+                          data-bs-target="#myCarousel"
+                          data-bs-slide-to="0"
+                          class="active"
+                          aria-current="true"
+                          aria-label="Slide 1"></button>
+                  <button type="button"
+                          data-bs-target="#myCarousel"
+                          data-bs-slide-to="1"
+                          aria-label="Slide 2"></button>
+                  <button type="button"
+                          data-bs-target="#myCarousel"
+                          data-bs-slide-to="2"
+                          aria-label="Slide 3"></button>
+              </div>
+              <div class="carousel-inner">
+                  <div class="carousel-item active">
+                      <svg aria-hidden="true"
+                           class="bd-placeholder-img"
+                           height="100%"
+                           preserveAspectRatio="xMidYMid slice"
+                           width="100%"
+                           xmlns="http://www.w3.org/2000/svg">
+                          <rect width="100%"
+                                height="100%"
+                                fill="var(--bs-secondary-color)"></rect>
+                      </svg>
+                      <div class="container">
+                          <div class="carousel-caption text-start">
+                              <h1>Pizza.</h1>
+                              <p class="opacity-75">
+                                  Oprindelige Napolitanske opskrifter og ingredienser.
+                              </p>
+                              <p>
+                                  <a class="btn btn-lg btn-wood" href="#">Menu</a>
+                              </p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="carousel-item">
+                      <svg aria-hidden="true"
+                           class="bd-placeholder-img"
+                           height="100%"
+                           preserveAspectRatio="xMidYMid slice"
+                           width="100%"
+                           xmlns="http://www.w3.org/2000/svg">
+                          <rect width="100%"
+                                height="100%"
+                                fill="var(--bs-secondary-color)"></rect>
+                      </svg>
+                      <div class="container">
+                          <div class="carousel-caption">
+                              <h1>Pasta</h1>
+                              <p>
+                                  Oprindelige Syditalienske familieopskrifter med råvarer af bedste kvalitet
+                              </p>
+                              <p><a class="btn btn-lg btn-wood" href="#">Menu</a></p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="carousel-item">
+                      <svg aria-hidden="true"
+                           class="bd-placeholder-img"
+                           height="100%"
+                           preserveAspectRatio="xMidYMid slice"
+                           width="100%"
+                           xmlns="http://www.w3.org/2000/svg">
+                          <rect width="100%"
+                                height="100%"
+                                fill="var(--bs-secondary-color)"></rect>
+                      </svg>
+                      <div class="container">
+                          <div class="carousel-caption text-end">
+                              <h1>Drikke</h1>
+                              <p>
+                                  Vin fra Apulien og Piemonte. Vi har selvfølgelige også Italinske øl.
+                              </p>
+                              <p>
+                                  <a class="btn btn-lg btn-wood" href="#">Menu</a>
+                              </p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <button class="carousel-control-prev"
+                      type="button"
+                      data-bs-target="#myCarousel"
+                      data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next"
+                      type="button"
+                      data-bs-target="#myCarousel"
+                      data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+              </button>
+          </div>
+          <!--================================================== -->
+          <!-- MODAL 1: CREATE CUSTOMER -->
+          <div class="modal fade" id="createCustomerModal" tabindex="-1">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header bg-primary text-white">
+                          <h5 class="modal-title">Register New Customer</h5>
+                          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                      </div>
+                      <div class="modal-body">
+                          <form id="createCustomerForm">
+                              <div class="mb-3">
+                                  <label for="newCustName" class="form-label">Full Name</label>
+                                  <input type="text" class="form-control" id="newCustName" required>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="newCustAge" class="form-label">Age</label>
+                                  <input type="number" class="form-control" id="newCustAge" required>
+                              </div>
+                              <div class="d-grid">
+                                  <button type="submit" class="btn btn-primary">Create Account</button>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+
+          <!-- ================================================== -->
+          <!-- MODAL 2: MENU & BASKET -->
+          <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+              <div class="modal-dialog modal-xl modal-dialog-centered">
+                  <div class="modal-content" style="background-color: #4a7e79">
+
+                      <div class="modal-header bg-danger text-white headline bg-black">
+                          <h5 class="modal-title"><i class="bi bi-basket"></i> Menu & Indkøbskurv</h5>
+                          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                      </div>
+
+                      <div class="modal-body p-0 d-flex flex-column" style="height: 80vh;">
+
+                          <!-- Product List  -->
+                          <div class="p-3 border-bottom product-scroll flex-grow-1">
+                              <h6 class="text-muted text-uppercase small fw-bold">Tilgængelige valg</h6>
+
+                              <div id="productLoading" class="text-center d-none">
+                                  <div class="spinner-border spinner-border-sm text-danger"></div> Loading...
+                              </div>
+
+                              <div class="table-responsive">
+                                  <table class="table table-sm table-hover align-middle">
+                                      <thead class="table-light">
+                                          <tr>
+                                              <th>Ret</th>
+                                              <th>Beskrivelse</th>
+                                              <th class="text-end">Pris</th>
+                                              <th class="text-end">Vælg</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody id="productsTableBody"></tbody>
+                                  </table>
+                              </div>
+                          </div>
+
+                          <!--  Shopping Basket  -->
+                          <div class="basket-section p-3">
+                              <div class="d-flex justify-content-between align-items-center mb-2">
+                                  <h6 class="m-0 fw-bold"><i class="bi bi-cart-check"></i> Din kurv</h6>
+                                  <span class="badge bg-secondary" id="basketCount">0 valgte</span>
+                              </div>
+
+                              <div class="table-responsive bg-white border rounded p-2 mb-3" style="max-height: 150px; overflow-y: auto;">
+                                  <table class="table table-sm table-bordered mb-0">
+                                      <thead class="table-light">
+                                          <tr>
+                                              <th style="width: 50%">Menu valg</th>
+                                              <th class="text-center">Antal</th>
+                                              <th class="text-end">Total</th>
+                                              <th></th>
+                                          </tr>
+                                      </thead>
+                                      <tbody id="basketTableBody">
+                                          <tr><td colspan="4" class="text-center text-muted small">Indkøbskurven er tom</td></tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+
+                              <div class="d-flex justify-content-between align-items-center">
+                                  <div class="h4 mb-0">I alt: <span id="grandTotal" class="brown-text">0.00</span></div>
+                                  <a id="placeOrderBtn" class="btn btn-lg btn-wood" onclick="placeOrder()" disabled>
+                                      Bestil Menu <i class="bi bi-check-circle"></i>
+                                  </a>
+                              </div>
+                          </div>
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Toast Notification -->
+          <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
+              <div id="liveToast" class="toast align-items-center text-white border-0" role="alert">
+                  <div class="d-flex">
+                      <div class="toast-body" id="toastBody"></div>
+                      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                  </div>
+              </div>
+          </div>
+
+
+          <!--================================================== -->
+          <!-- Marketing messaging and featurettes -->
+          <div class="container marketing">
+              <!-- Below the carousel -->
+              <div class="row">
+                  <div class="col-lg-4">
+                      <img src="images/food.jpg" type="image" width="200px" height="200px" class="bd-placeholder-img rounded-circle" />
+                      <h2 class="fw-normal">Vores madfilosofi</h2>
+                      <p>
+                          Som italiener ved vi har kulturen omkring mad er vigtig for det rigtige selskab.
+                      </p>
+                      <p>
+                          <a class="btn btn-wood" href="#">Se mere &raquo;</a>
+                      </p>
+                  </div>
+                  <!-- /.col-lg-4 -->
+                  <div class="col-lg-4">
+                      <img src="images/hall.jpg" type="image" width="200px" height="200px" class="bd-placeholder-img rounded-circle" />
+                      <h2 class="fw-normal">Vores lokaler</h2>
+                      <p>
+                          Billeder fra tidligere selskaber. Blandt andet bryllupper og fødselsdage.
+                      </p>
+                      <p>
+                          <a class="btn btn-wood" href="#">Se mere &raquo;</a>
+                      </p>
+                  </div>
+                  <!-- /.col-lg-4 -->
+                  <div class="col-lg-4">
+                      <img src="images/dinner.jpg" type="image" width="200px" height="200px" class="bd-placeholder-img rounded-circle" />
+                      <h2 class="fw-normal">Hvad siger vores gæster</h2>
+                      <p>
+                          Vores gæsters mening er det bedste bevis på at vi er det gode valg.
+                      </p>
+                      <p>
+                          <a class="btn btn-wood" href="#">Se mere &raquo;</a>
+                      </p>
+                  </div>
+                  <!-- /.col-lg-4 -->
+              </div>
+              <!-- /.row -->
+              <!-- START THE FEATURETTES -->
+              <hr class="featurette-divider" />
+              <div class="row featurette">
+                  <div class="col-md-7">
+                      <h2 class="featurette-heading fw-normal lh-1">
+                          Pizza.
+                          <span class="text-body-secondary">Oprindelse.</span>
+                      </h2>
+                      <p class="lead">
+                          Den moderne pizza blev opfundet i Napoli, Italien engang i 1600-tallet.
+                      </p>
+                  </div>
+                  <div class="col-md-5">
+
+                      <img src="images/pizza.jpg" type="image" width="90%" height="90%" class="rounded" />
+
+                  </div>
+              </div>
+              <hr class="featurette-divider" />
+              <div class="row featurette">
+                  <div class="col-md-7 order-md-2">
+                      <h2 class="featurette-heading fw-normal lh-1">
+                          Pasta.
+                          <span class="text-body-secondary">Oprindelse.</span>
+                      </h2>
+                      <p class="lead">
+                          Pastaens oprindelse er omgærdet af forskellige teorier. Nogle mener, at nudellignende retter først blev opfundet i Kina og senere bragt til Italien.
+                      </p>
+                  </div>
+                  <div class="col-md-5 order-md-1">
+                      <img src="images/carbonara.jpg" type="image" width="90%" height="90%" class="rounded" />
+
+                  </div>
+              </div>
+
+              <hr class="featurette-divider" />
+              <!-- /END  -->
+          </div>
+          <!-- /.container -->
+          <!-- FOOTER -->
+          <footer class="container">
+              <p class="float-end"><a href="#" class="link-text">Back to top</a></p>
+              <p>
+                  &copy; 1975–2026 Grandiosa A/S &middot; Privacy &middot; Terms By Frank
+              </p>
+          </footer>
+      </main>
+
+      <!-- Bootstrap JS -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+      <!-- Javascript Script -->
+      <script>
+          // --- URL ---
+          const uri = 'http://localhost:5000';
+          // --- State ---
+          let basket = []; // Array to hold selected items: { id, name, price, qty }
+
+          // --- Elements ---
+          const openMenuBtn = document.getElementById('openMenuBtn');
+          const productModalEl = document.getElementById('productModal');
+          const productModal = new bootstrap.Modal(productModalEl);
+
+          // ---  Create Customer  ---
+          document.getElementById('createCustomerForm').addEventListener('submit', async (e) => {
+              e.preventDefault();
+              const name = document.getElementById('newCustName').value.trim();
+              const age = document.getElementById('newCustAge').value;
+
+              try {
+                  const res = await fetch(uri+'/api/customer', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ name: name, age: parseInt(age) })
+                  });
+                  if (res.ok) {
+                      const cust = await res.json();
+                      document.getElementById('customerId').value = cust.id;
+                      bootstrap.Modal.getInstance(document.getElementById('createCustomerModal')).hide();
+                      showToast('Success', `Customer created! ID: ${cust.id}`, 'bg-success');
+                  }
+              } catch (err) { showToast('Error', err.message, 'bg-danger'); }
+          });
+
+          // ---  Open Menu & Load Products ---
+          openMenuBtn.addEventListener('click', () => {
+              const custId = document.getElementById('customerId').value;
+              if (!custId) return showToast('Error', 'Indsæt først kunde nr.', 'bg-danger');
+
+              // Reset basket
+              basket = [];
+              renderBasket();
+
+              productModal.show();
+              fetchProducts();
+          });
+
+          async function fetchProducts() {
+              const tbody = document.getElementById('productsTableBody');
+              const loader = document.getElementById('productLoading');
+              tbody.innerHTML = '';
+              loader.classList.remove('d-none');
+
+              try {
+                  const res = await fetch(uri+'/api/products');
+                  const products = await res.json();
+                  loader.classList.add('d-none');
+
+                  products.forEach(p => {
+                      const tr = document.createElement('tr');
+                      tr.innerHTML = `
+                              <td><span class="badge bg-info text-dark">${escapeHtml(p.type)}</span></td>
+                              <td>${escapeHtml(p.description)}</td>
+                              <td class="text-end">${formatCurrency(p.price)}</td>
+                              <td class="text-end">
+                                  <button class="btn btn-sm btn-outline-primary btn-wood" onclick="addToBasket(${p.id}, '${escapeHtml(p.description)}', ${p.price})">
+                                      <i class="bi bi-plus-lg"></i> Tilføj
+                                  </button>
+                              </td>
+                          `;
+                      tbody.appendChild(tr);
+                  });
+              } catch (err) {
+                  loader.innerHTML = `<span class="text-danger">Failed to load products</span>`;
+              }
+          }
+
+          // --- Basket Logic ---
+          function addToBasket(id, name, price) {
+              // Check if item exists
+              const existing = basket.find(item => item.id === id);
+              if (existing) {
+                  existing.qty++;
+              } else {
+                  basket.push({ id, name, price, qty: 1 });
+              }
+              renderBasket();
+          }
+
+          function removeFromBasket(id) {
+              const index = basket.findIndex(item => item.id === id);
+              if (index > -1) {
+                  if (basket[index].qty > 1) {
+                      basket[index].qty--;
+                  } else {
+                      basket.splice(index, 1);
+                  }
+              }
+              renderBasket();
+          }
+
+          function renderBasket() {
+              const tbody = document.getElementById('basketTableBody');
+              const countBadge = document.getElementById('basketCount');
+              const totalEl = document.getElementById('grandTotal');
+              const orderBtn = document.getElementById('placeOrderBtn');
+
+              tbody.innerHTML = '';
+              let grandTotal = 0;
+              let totalItems = 0;
+
+              if (basket.length === 0) {
+                  tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted small">Kurven er tom</td></tr>';
+                  orderBtn.disabled = true;
+              } else {
+                  basket.forEach(item => {
+                      const lineTotal = item.price * item.qty;
+                      grandTotal += lineTotal;
+                      totalItems += item.qty;
+
+                      const tr = document.createElement('tr');
+                      tr.innerHTML = `
+                              <td><small>${escapeHtml(item.name)}</small></td>
+                              <td class="text-center">
+                                  <button class="btn btn-xs btn-link p-0 text-decoration-none" onclick="removeFromBasket(${item.id})">-</button>
+                                  <span class="mx-2 fw-bold">${item.qty}</span>
+                                  <button class="btn btn-xs btn-link p-0 text-decoration-none" onclick="addToBasket(${item.id}, '${escapeHtml(item.name)}', ${item.price})">+</button>
+                              </td>
+                              <td class="text-end small">${formatCurrency(lineTotal)}</td>
+                              <td class="text-end"><button class="btn btn-sm text-danger" onclick="removeFromBasket(${item.id})">&times;</button></td>
+                          `;
+                      tbody.appendChild(tr);
+                  });
+                  orderBtn.disabled = false;
+              }
+
+              countBadge.textContent = `${totalItems} valg`;
+              totalEl.textContent = formatCurrency(grandTotal);
+          }
+
+          // --- Place Order  ---
+          async function placeOrder() {
+              if (basket.length === 0) return;
+
+              const customerId = document.getElementById('customerId').value;
+              const btn = document.getElementById('placeOrderBtn');
+
+              // UI Feedback
+              const originalText = btn.innerHTML;
+              btn.disabled = true;
+              btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Processing...`;
+
+              // Construct Payload
+              // We send ONE SalesOrder with an array of SalesLines inside it.
+              const orderPayload = {
+                  customerId: parseInt(customerId),
+                  orderType: "Web",
+                  isAccepted: false,
+                  isPosted: false,
+                  date: new Date().toISOString(),
+                  salesLines: basket.map(item => ({
+                      productId: item.id,
+                      quantity: item.qty,
+                      price: item.price // Pass raw price
+                  }))
+              };
+
+              try {
+                  const res = await fetch(uri+'/api/salesorder', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify(orderPayload)
+                  });
+
+                  if (res.ok) {
+                      const result = await res.json();
+                      showToast('Success!', `Order #${result.id} placed successfully.`, 'bg-success');
+                      productModal.hide(); // Close modal
+                  } else {
+                      throw new Error(`Order failed: ${res.status}`);
+                  }
+              } catch (err) {
+                  showToast('Error', err.message, 'bg-danger');
+              } finally {
+                  btn.disabled = false;
+                  btn.innerHTML = originalText;
+              }
+          }
+
+          // --- Helpers ---
+          function formatCurrency(v) {
+              return v.toFixed(2);
+
+          }
+          function escapeHtml(text) { if (!text) return ''; return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+          function showToast(title, msg, bg) {
+              const t = document.getElementById('liveToast');
+              document.getElementById('toastBody').textContent = `${title}: ${msg}`;
+              t.className = `toast align-items-center text-white border-0 ${bg}`;
+              new bootstrap.Toast(t).show();
+          }
+      </script>
+
+
+  </body>
+</html>

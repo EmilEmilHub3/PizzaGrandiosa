@@ -1,0 +1,27 @@
+<Solution>
+  <Project Path="PizzaGrandiosa/PizzaGrandiosa.csproj" />
+  <Project Path="PizzaModels/PizzaModels.csproj" Id="81d9ba3c-009e-4191-964d-05d8cadc8515" />
+  <Project Path="pizzaweb/" Type="Website" DisplayName="pizzaweb">
+    <BuildType Project="Debug" />
+    <Properties Name="WebsiteProperties">
+      <Property Name="Debug.AspNetCompiler.Debug" Value="&quot;True&quot;" />
+      <Property Name="Debug.AspNetCompiler.FixedNames" Value="&quot;false&quot;" />
+      <Property Name="Debug.AspNetCompiler.ForceOverwrite" Value="&quot;true&quot;" />
+      <Property Name="Debug.AspNetCompiler.PhysicalPath" Value="&quot;pizzaweb\&quot;" />
+      <Property Name="Debug.AspNetCompiler.TargetPath" Value="&quot;PrecompiledWeb\localhost_51777\&quot;" />
+      <Property Name="Debug.AspNetCompiler.Updateable" Value="&quot;true&quot;" />
+      <Property Name="Debug.AspNetCompiler.VirtualPath" Value="&quot;/localhost_51777&quot;" />
+      <Property Name="Release.AspNetCompiler.Debug" Value="&quot;False&quot;" />
+      <Property Name="Release.AspNetCompiler.FixedNames" Value="&quot;false&quot;" />
+      <Property Name="Release.AspNetCompiler.ForceOverwrite" Value="&quot;true&quot;" />
+      <Property Name="Release.AspNetCompiler.PhysicalPath" Value="&quot;pizzaweb\&quot;" />
+      <Property Name="Release.AspNetCompiler.TargetPath" Value="&quot;PrecompiledWeb\localhost_51777\&quot;" />
+      <Property Name="Release.AspNetCompiler.Updateable" Value="&quot;true&quot;" />
+      <Property Name="Release.AspNetCompiler.VirtualPath" Value="&quot;/localhost_51777&quot;" />
+      <Property Name="TargetFrameworkMoniker" Value="&quot;.NETFramework,Version%3Dv4.8&quot;" />
+      <Property Name="VWDPort" Value="&quot;51777&quot;" />
+    </Properties>
+  </Project>
+  <Project Path="PizzaWebAPI/PizzaWebAPI.csproj" Id="087f2aa0-fbd0-44a2-9922-3ae80a4ecd3b" />
+  <Project Path="PizzaRabbitMqClient/PizzaRabbitMqClient.csproj" Id="d55b71ef-a112-4f08-9d97-e2a5100f4d72" />
+</Solution>
