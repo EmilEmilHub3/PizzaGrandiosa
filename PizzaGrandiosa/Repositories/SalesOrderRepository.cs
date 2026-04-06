@@ -6,43 +6,38 @@ namespace PizzaGrandiosa.Repositories
 {
     public class SalesOrderRepository : ISalesOrderRepository
     {
-        private readonly PizzaDbContext _dbContext;
+        private readonly PizzaDbContext _context;
 
-        public SalesOrderRepository(PizzaDbContext dbContext)
+        public SalesOrderRepository(PizzaDbContext context)
         {
-            _dbContext = dbContext;
+            _context = context;
         }
 
         public async Task<SalesOrder?> Add(SalesOrder salesOrder)
         {
-            salesOrder.Date = salesOrder.Date.ToUniversalTime();
-            await _dbContext.SalesOrders.AddAsync(salesOrder);
-            await _dbContext.SaveChangesAsync();
-            return salesOrder;
+            _context.SalesOrders.Add(salesOrder);
+            await _context.SaveChangesAsync();
+
+            return await _context.SalesOrders
+                .Include(o => o.SalesLines)
+                .ThenInclude(sl => sl.Product)
+                .FirstOrDefaultAsync(o => o.Id == salesOrder.Id);
         }
 
         public async Task<SalesOrder?> Get(int id)
         {
-            var salesOrdersRetrieved = await _dbContext.SalesOrders
-                .Include(m => m.CustomerFK)
-                .Include(m => m.SalesLines)
-                .ThenInclude(salesLines => salesLines.Product)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (salesOrdersRetrieved == null)
-                return null;
-            return salesOrdersRetrieved;
+            return await _context.SalesOrders
+                .Include(o => o.SalesLines)
+                .ThenInclude(sl => sl.Product)
+                .FirstOrDefaultAsync(o => o.Id == id);
         }
 
         public async Task<IEnumerable<SalesOrder>> GetAllSalesOrdersAsync()
         {
-            return await _dbContext.SalesOrders
-              .Include(m => m.CustomerFK)
-              .Include(m => m.SalesLines)
-              .ThenInclude(salesLines => salesLines.Product)
-              .AsNoTracking()
-              .ToListAsync();
+            return await _context.SalesOrders
+                .Include(o => o.SalesLines)
+                .ThenInclude(sl => sl.Product)
+                .ToListAsync();
         }
     }
 }
