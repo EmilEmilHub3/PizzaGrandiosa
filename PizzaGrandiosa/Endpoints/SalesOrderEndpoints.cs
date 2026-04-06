@@ -23,8 +23,8 @@ namespace PizzaGrandiosa.Endpoints
             {
                 Console.WriteLine("Get all salesOrder invoked");
 
-                var salesOrder = await repo.GetAllSalesOrdersAsync();
-                return TypedResults.Ok(salesOrder);
+                var salesOrders = await repo.GetAllSalesOrdersAsync();
+                return TypedResults.Ok(salesOrders);
             });
 
             salesOrderApi.MapPost("/", async (
@@ -38,7 +38,7 @@ namespace PizzaGrandiosa.Endpoints
 
                 if (newSalesOrder is not null)
                 {
-                    await rabbitMqPublisher.PublishSalesOrderCreatedAsync(new SalesOrderCreatedMessage
+                    var message = new SalesOrderCreatedMessage
                     {
                         SalesOrderId = newSalesOrder.Id,
                         CustomerId = newSalesOrder.CustomerId,
@@ -46,8 +46,24 @@ namespace PizzaGrandiosa.Endpoints
                         IsAccepted = newSalesOrder.IsAccepted,
                         IsPosted = newSalesOrder.IsPosted,
                         Date = newSalesOrder.Date,
-                        SalesLineCount = newSalesOrder.SalesLines?.Count ?? 0
-                    });
+                        SalesLines = newSalesOrder.SalesLines?.Select(sl => new SalesLineMessage
+                        {
+                            Id = sl.Id,
+                            SalesOrderId = sl.SalesOrderId,
+                            Quantity = sl.Quantity,
+                            Price = sl.Price,
+                            ProductId = sl.ProductId,
+                            Product = sl.Product == null ? null : new ProductMessage
+                            {
+                                Id = sl.Product.Id,
+                                Type = sl.Product.Type,
+                                Description = sl.Product.Description,
+                                Price = sl.Product.Price
+                            }
+                        }).ToList() ?? new List<SalesLineMessage>()
+                    };
+
+                    await rabbitMqPublisher.PublishSalesOrderCreatedAsync(message);
                 }
 
                 return TypedResults.Created($"/api/customer/{newSalesOrder?.Id}", newSalesOrder);
