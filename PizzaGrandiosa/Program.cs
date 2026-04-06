@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +6,6 @@ using PizzaGrandiosa.Endpoints;
 using PizzaGrandiosa.Persistence;
 using PizzaGrandiosa.Repositories;
 using PizzaGrandiosa.Services;
-
 
 namespace PizzaGrandiosa;
 
@@ -51,7 +50,9 @@ public class Program
             var dbContext = scope.ServiceProvider.GetRequiredService<PizzaDbContext>();
 
             await dbContext.Database.EnsureCreatedAsync();
-            Console.WriteLine("Database ensured/created");
+            await SeedData.InitializeAsync(dbContext); // 👈 HER er seed
+
+            Console.WriteLine("Database ensured/created + seeded");
         }
 
         app.UseAuthorization();
