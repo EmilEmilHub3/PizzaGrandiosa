@@ -1,15 +1,14 @@
 ﻿using PizzaModels.Models;
 using PizzaWebAPI.DTO;
 using System.Net.Http.Json;
-using System.Text.Json;
 
 namespace PizzaWebAPI.Service
 {
     public interface IWebServiceSalesLine
     {
-        Task<SalesLineDTO> Get(int id);
+        Task<SalesLineDTO?> Get(int id);
         Task<List<SalesLineDTO>> GetAllSalesLinesAsync();
-        Task<SalesLineDTO?> Add(SalesLineDTO salseline);
+        Task<SalesLineDTO?> Add(SalesLineDTO salesline);
     }
 
     public class WebServiceSalesLine : IWebServiceSalesLine
@@ -20,40 +19,56 @@ namespace PizzaWebAPI.Service
         {
             _factory = factory;
         }
-        
-        public async Task<SalesLineDTO?> Add(SalesLineDTO salselineDTO)
+
+        public async Task<SalesLineDTO?> Add(SalesLineDTO saleslineDTO)
         {
             using HttpClient client = _factory.CreateClient("Default");
 
-            var salseline = salselineDTO.GetAsSalesLine();
-            var salselineResponse = await client.PostAsJsonAsync<SalesLine>($"/api/saleslines/", salseline);
-            salselineResponse.EnsureSuccessStatusCode();
+            var salesline = saleslineDTO.GetAsSalesLine();
 
-            var newSalesLine = await salselineResponse.Content.ReadFromJsonAsync<SalesLine>();
+            var response = await client.PostAsJsonAsync(
+                "/api/saleslines/",
+                salesline);
 
-            return new SalesLineDTO(newSalesLine);
+            response.EnsureSuccessStatusCode();
+
+            var newSalesLine =
+                await response.Content.ReadFromJsonAsync<SalesLine>();
+
+            return newSalesLine is null
+                ? null
+                : new SalesLineDTO(newSalesLine);
         }
 
-        public async Task<SalesLineDTO> Get(int id)
+        public async Task<SalesLineDTO?> Get(int id)
         {
             using HttpClient client = _factory.CreateClient("Default");
 
-            SalesLine? salesline = await client.GetFromJsonAsync<SalesLine>($"/api/saleslines/");
+            var response = await client.GetAsync($"/api/saleslines/{id}");
 
-            return new SalesLineDTO(salesline);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var salesline =
+                await response.Content.ReadFromJsonAsync<SalesLine>();
+
+            return salesline is null
+                ? null
+                : new SalesLineDTO(salesline);
         }
 
         public async Task<List<SalesLineDTO>> GetAllSalesLinesAsync()
         {
             using HttpClient client = _factory.CreateClient("Default");
 
-            List<SalesLine> saleslines = await client.GetFromJsonAsync<List<SalesLine>>($"/api/saleslines/");
+            var saleslines =
+                await client.GetFromJsonAsync<List<SalesLine>>("/api/saleslines/");
 
-            var saleslineDTOs = saleslines?.ConvertAll(x => new SalesLineDTO(x));
-
-            return saleslineDTOs;
+            return saleslines?
+                .ConvertAll(x => new SalesLineDTO(x))
+                ?? new List<SalesLineDTO>();
         }
-
-
     }
 }

@@ -1,15 +1,34 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace PizzaRabbitMqClient;
 
-public class SalesOrderCreatedMessage
+public class SalesOrderCreatedMessage : INotifyPropertyChanged
 {
-    public int OrderId { get; set; }
+    private bool _isAccepted;
+
+    public int SalesOrderId { get; set; }
     public int CustomerId { get; set; }
     public string? OrderType { get; set; }
-    public bool IsAccepted { get; set; }
+
+    public bool IsAccepted
+    {
+        get => _isAccepted;
+        set
+        {
+            if (_isAccepted == value)
+            {
+                return;
+            }
+
+            _isAccepted = value;
+            OnPropertyChanged();
+        }
+    }
+
     public bool IsPosted { get; set; }
     public DateTime Date { get; set; }
     public List<SalesLineMessage> SalesLines { get; set; } = new();
@@ -21,6 +40,13 @@ public class SalesOrderCreatedMessage
             ? string.Join(", ", SalesLines.Select(l =>
                 $"{(l.Product?.Description ?? $"ProductId: {l.ProductId}")} x{l.Quantity}"))
             : "Ingen linjer";
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }
 
 public class SalesLineMessage

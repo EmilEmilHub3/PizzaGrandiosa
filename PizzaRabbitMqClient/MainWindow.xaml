@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Pizza RabbitMQ Client"
-        Height="500"
-        Width="1100">
+        Height="520"
+        Width="1150">
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -20,18 +21,28 @@
                    Margin="0,0,0,10"/>
 
         <TextBlock Grid.Row="1"
-                   Text="Når backend opretter en SalesOrder, dukker den op her via RabbitMQ."
+                   Text="Når backend opretter en SalesOrder, dukker den op her via RabbitMQ. Vælg en ordre og klik Accept."
                    Margin="0,0,0,10"/>
 
-        <DataGrid Grid.Row="2"
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    Margin="0,0,0,10">
+            <Button Content="Accept selected order"
+                    Width="180"
+                    Height="32"
+                    Click="AcceptSelectedOrder_Click"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="3"
                   x:Name="OrdersDataGrid"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   ItemsSource="{Binding Orders}"
                   CanUserAddRows="False"
+                  SelectionMode="Single"
                   Margin="0,5,0,0">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="OrderId" Binding="{Binding OrderId}" Width="90"/>
+                <DataGridTextColumn Header="SalesOrderId" Binding="{Binding SalesOrderId}" Width="100"/>
                 <DataGridTextColumn Header="CustomerId" Binding="{Binding CustomerId}" Width="90"/>
                 <DataGridTextColumn Header="Type" Binding="{Binding OrderType}" Width="110"/>
                 <DataGridTextColumn Header="Dato" Binding="{Binding Date}" Width="180"/>

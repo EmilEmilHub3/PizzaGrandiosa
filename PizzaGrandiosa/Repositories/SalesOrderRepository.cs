@@ -39,5 +39,23 @@ namespace PizzaGrandiosa.Repositories
                 .ThenInclude(sl => sl.Product)
                 .ToListAsync();
         }
+
+        public async Task<SalesOrder?> MarkAcceptedAsync(int id)
+        {
+            var order = await _context.SalesOrders
+                .Include(o => o.SalesLines)
+                .ThenInclude(sl => sl.Product)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
+            if (order is null)
+            {
+                return null;
+            }
+
+            order.IsAccepted = true;
+            await _context.SaveChangesAsync();
+
+            return order;
+        }
     }
 }

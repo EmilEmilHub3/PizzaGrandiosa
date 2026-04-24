@@ -20,6 +20,17 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("PizzaWeb", policy =>
+            {
+                policy
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
+
         builder.Services.AddDbContext<PizzaDbContext>(options =>
         {
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
@@ -30,6 +41,8 @@ public class Program
 
         builder.Services.Configure<RabbitMqOptions>(
             builder.Configuration.GetSection(RabbitMqOptions.SectionName));
+
+        builder.Services.AddSingleton<ISalesOrderSseNotifier, SalesOrderSseNotifier>();
 
         builder.Services.AddScoped<IRabbitMqPublisher, RabbitMqPublisher>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -50,11 +63,12 @@ public class Program
             var dbContext = scope.ServiceProvider.GetRequiredService<PizzaDbContext>();
 
             await dbContext.Database.EnsureCreatedAsync();
-            await SeedData.InitializeAsync(dbContext); // 👈 HER er seed
+            await SeedData.InitializeAsync(dbContext);
 
             Console.WriteLine("Database ensured/created + seeded");
         }
 
+        app.UseCors("PizzaWeb");
         app.UseAuthorization();
 
         // Endpoints

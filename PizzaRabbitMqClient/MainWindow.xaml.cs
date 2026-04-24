@@ -2,6 +2,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.ObjectModel;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
@@ -11,6 +12,12 @@ namespace PizzaRabbitMqClient;
 public partial class MainWindow : Window
 {
     private const string QueueName = "salesorder-created";
+    private const string BackendBaseUrl = "http://localhost:5000";
+
+    private readonly HttpClient _httpClient = new()
+    {
+        BaseAddress = new Uri(BackendBaseUrl)
+    };
 
     private IConnection? _connection;
     private IChannel? _channel;
@@ -90,7 +97,68 @@ public partial class MainWindow : Window
         }
         catch
         {
-            // Ignorer fejlende enkeltbeskeder i prototypen
+            // Ignore bad messages in prototype
+        }
+    }
+
+    private async void AcceptSelectedOrder_Click(object sender, RoutedEventArgs e)
+    {
+        if (OrdersDataGrid.SelectedItem is not SalesOrderCreatedMessage selectedOrder)
+        {
+            MessageBox.Show(
+                "Vælg en ordre først.",
+                "Ingen ordre valgt",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+
+            return;
+        }
+
+        if (selectedOrder.IsAccepted)
+        {
+            MessageBox.Show(
+                "Ordren er allerede accepteret.",
+                "Allerede accepteret",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+
+            return;
+        }
+
+        try
+        {
+            var response = await _httpClient.PutAsync(
+                $"/api/salesorder/{selectedOrder.SalesOrderId}/accept",
+                content: null);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+
+                MessageBox.Show(
+                    $"Accept fejlede.\n\nStatus: {(int)response.StatusCode}\n{errorBody}",
+                    "Backend fejl",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+
+                return;
+            }
+
+            selectedOrder.IsAccepted = true;
+
+            MessageBox.Show(
+                $"Ordre #{selectedOrder.SalesOrderId} er accepteret.",
+                "Ordre accepteret",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"Kunne ikke acceptere ordren.\n\n{ex.Message}",
+                "HTTP fejl",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
         }
     }
 
@@ -98,6 +166,8 @@ public partial class MainWindow : Window
     {
         try
         {
+            _httpClient.Dispose();
+
             if (_channel != null)
             {
                 await _channel.CloseAsync();
@@ -112,7 +182,7 @@ public partial class MainWindow : Window
         }
         catch
         {
-            // Ignorer lukke-fejl i prototypen
+            // Ignore shutdown errors in prototype
         }
     }
 }
